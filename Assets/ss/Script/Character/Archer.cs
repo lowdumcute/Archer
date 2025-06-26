@@ -54,6 +54,12 @@ public class Archer : CharacterControllerInput
             return;
         }
 
+        // ✅ Thêm dòng này để xoay nhân vật theo camera
+        Vector3 cameraForward = mainCamera.transform.forward;
+        cameraForward.y = 0f;
+        if (cameraForward != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(cameraForward);
+
         // Disable camera script
         ThirdPersonCamera.instance.enabled = false;
 
@@ -153,9 +159,4 @@ public class Archer : CharacterControllerInput
         Vector3 targetPosition = transform.position + transform.rotation * direction * 2f + Vector3.up * 1.5f;
         aimTarget.position = targetPosition;
     }
-
-
-
-
-
 }
