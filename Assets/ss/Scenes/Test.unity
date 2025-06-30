@@ -236,7 +236,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 252177750}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5698518, y: -0.62392384, z: 0.30995283, w: 0.43579495}
+  m_LocalRotation: {x: 0.55914325, y: -0.6342303, z: 0.2914323, w: 0.44741264}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -270,10 +270,12 @@ Transform:
   m_GameObject: {fileID: 275191708}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.39, y: 1.36, z: 0.09}
+  m_LocalPosition: {x: -3, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 328799128}
+  - {fileID: 1250854423}
   m_Father: {fileID: 701270079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &275191710
@@ -288,7 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0.511
+  m_Weight: 1
   m_Data:
     m_ConstrainedObject: {fileID: 5637275968454726221}
     m_SourceObjects:
@@ -317,11 +319,11 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: -60, y: 0, z: -10}
-    m_MinLimit: -180
-    m_MaxLimit: 180
-    m_AimAxis: 3
-    m_UpAxis: 5
+    m_Offset: {x: 5, y: -15, z: 5}
+    m_MinLimit: -80
+    m_MaxLimit: 80
+    m_AimAxis: 5
+    m_UpAxis: 2
     m_WorldUpType: 0
     m_WorldUpObject: {fileID: 0}
     m_WorldUpAxis: 2
@@ -355,11 +357,11 @@ Transform:
   m_GameObject: {fileID: 328799127}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.822, y: 0.963, z: 1.992}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 701270079}
+  m_Father: {fileID: 275191709}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
@@ -666,7 +668,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Weight: 1
-  m_Effectors: []
+  m_Effectors:
+  - m_Transform: {fileID: 328799128}
+    m_Style:
+      shape: {fileID: 289301614986012343, guid: 9e1c97fc44f9a8744b61b58f72c56de4, type: 3}
+      color: {r: 0.2026666, g: 0.754717, b: 0, a: 0.5}
+      size: 10
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+    m_Visible: 1
 --- !u!4 &701270079
 Transform:
   m_ObjectHideFlags: 0
@@ -681,8 +691,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 275191709}
-  - {fileID: 1250854423}
-  - {fileID: 328799128}
   m_Father: {fileID: 6447459070385066980}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &788070133
@@ -940,7 +948,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.34583, y: 1.12158, z: -0.39705}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 100, y: 1, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -992,7 +1000,7 @@ GameObject:
   - component: {fileID: 1072495926}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1191,11 +1199,11 @@ Transform:
   m_GameObject: {fileID: 1250854422}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.33, z: 1.172}
+  m_LocalPosition: {x: 5.77, y: 0.13, z: -2.0180001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 701270079}
+  m_Father: {fileID: 275191709}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1250854424
 MonoBehaviour:
@@ -1216,7 +1224,7 @@ MonoBehaviour:
       m_Length: 1
       m_Item0:
         transform: {fileID: 328799128}
-        weight: 0.48
+        weight: 1
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -1241,7 +1249,7 @@ MonoBehaviour:
     m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: -65
     m_MaxLimit: 60
-    m_AimAxis: 4
+    m_AimAxis: 3
     m_UpAxis: 2
     m_WorldUpType: 0
     m_WorldUpObject: {fileID: 0}
@@ -4076,8 +4084,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 252177751}
   - {fileID: 332664533286155810}
+  - {fileID: 252177751}
   m_Father: {fileID: 5146620542684098199}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5652473808625021121
@@ -4699,7 +4707,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f53cbcc801422b45bd2a87b112446e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 5
+  gravity: -9.81
+  verticalVelocity: 0
+  groundedCheckDistance: 0.1
   mainCamera: {fileID: 330585545}
   animator: {fileID: 0}
   arrowPrefab: {fileID: 3253106835612206424, guid: 6fd1ad60529f972498d9298fb8a41dcf, type: 3}
@@ -4709,6 +4720,7 @@ MonoBehaviour:
   originalCameraParent: {fileID: 1861220902}
   AimObj: {fileID: 275191708}
   aimTarget: {fileID: 328799128}
+  sensitivity: 0.2
 --- !u!143 &6447459070385066984
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4727,13 +4739,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1
+  m_Height: 1.5
   m_Radius: 0.2
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!1 &6481211249632506399
 GameObject:
   m_ObjectHideFlags: 0

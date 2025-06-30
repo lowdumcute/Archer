@@ -7,7 +7,9 @@ public class CharacterControllerInput : MonoBehaviour
     protected InputSystem inputActions;
     protected Vector2 moveInput;
     public float moveSpeed = 5f;
-
+    public float gravity = -9.81f;
+    public float verticalVelocity = 0f;
+    public float groundedCheckDistance = 0.1f; // Khoảng cách kiểm tra mặt đất
     private CharacterController controller;
     public Camera mainCamera;
     [HideInInspector]public Animator animator;
@@ -16,7 +18,7 @@ public class CharacterControllerInput : MonoBehaviour
     {
         inputActions = new InputSystem();
     }
-
+    
     protected virtual void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -31,6 +33,20 @@ public class CharacterControllerInput : MonoBehaviour
     protected virtual void Update()
     {
         Move();
+        ApplyGravity();
+    }
+    protected virtual void ApplyGravity()
+    {
+        // Nếu đang dưới đất → giữ sát mặt đất hoặc reset vận tốc rơi
+        if (controller.isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f; // giữ nhẹ trên mặt đất, không bị dính
+        }
+        else
+        {
+            // Áp lực hấp dẫn
+            verticalVelocity += gravity * Time.deltaTime;
+        }
     }
 
     protected virtual void Move()
@@ -38,7 +54,6 @@ public class CharacterControllerInput : MonoBehaviour
         if (moveInput == Vector2.zero)
         {
             animator?.SetFloat("Speed", 0f);
-            return;
         }
 
         Vector3 camForward = mainCamera.transform.forward;
@@ -52,19 +67,25 @@ public class CharacterControllerInput : MonoBehaviour
         Vector3 moveDir = camForward * moveInput.y + camRight * moveInput.x;
         moveDir.Normalize();
 
-        // Di chuyển bằng CharacterController
-        controller.Move(moveDir * moveSpeed * Time.deltaTime);
+        // Di chuyển ngang
+        Vector3 finalMove = moveDir * moveSpeed;
+
+        // Cộng thêm rơi (gravity)
+        finalMove.y = verticalVelocity;
+
+        controller.Move(finalMove * Time.deltaTime);
 
         // Gán animation
-        animator?.SetFloat("Speed", 1f);
+        animator?.SetFloat("Speed", moveDir != Vector3.zero ? 1f : 0f);
 
-        // 🔥 CHỈ xoay khi KHÔNG ngắm
+        // Chỉ xoay nếu không aim
         if (moveDir != Vector3.zero && !(this is Archer archer && archer.IsAiming))
         {
             Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, 10f * Time.deltaTime);
         }
     }
+
 
     protected virtual void OnMovePerformed(InputAction.CallbackContext context)
     {

@@ -20,7 +20,7 @@ public class Archer : CharacterControllerInput
     private Vector3 originalAimTargetLocalPosition;
     private float aimYaw = 0f;
     private float aimPitch = 0f;
-    private float sensitivity = 0.5f;
+    [SerializeField]private float sensitivity = 0.5f;
 
 
     protected override void Start()
@@ -92,41 +92,72 @@ public class Archer : CharacterControllerInput
 
     private void FireArrow()
     {
-        if (!isAiming) return;
+        Vector3 direction;      // hướng bắn
+        Quaternion rotation;    // quay của mũi tên
 
-        if (arrowPrefab != null && firePoint != null)
+        if (isAiming)
         {
-            // Ray từ giữa màn hình
+            /* NGUYÊN LOGIC CŨ
+            – bắn theo tâm màn hình
+            */
             Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.51f, 0.51f));
-            Vector3 targetPoint;
+            Vector3 targetPoint = ray.origin + ray.direction * 100f;
 
             if (Physics.Raycast(ray, out RaycastHit hit, 100f))
-            {
                 targetPoint = hit.point;
-            }
-            else
+
+            direction = (targetPoint - firePoint.position).normalized;
+            rotation  = Quaternion.LookRotation(direction);
+        }
+        else
+        {
+            // 🔸 KHÔNG AIM → tự chọn enemy gần nhất
+            Transform enemy = GetNearestEnemy();
+            if (enemy == null) return;             // Không có địch thì thôi
+
+            // Xoay nhân vật chỉ theo trục Y
+            Vector3 flatDir = enemy.position - transform.position ;
+            flatDir.y = 0f;
+            if (flatDir != Vector3.zero)
             {
-                targetPoint = ray.origin + ray.direction * 100f;
+                Quaternion lookRotation = Quaternion.LookRotation(flatDir);
+                // Quay thêm 90 độ quanh trục Y (tùy model quay thiếu hay dư)
+                transform.rotation = lookRotation * Quaternion.Euler(0f, 90f, 0f);
             }
 
-            // Hướng từ firePoint đến targetPoint
-            Vector3 direction = (targetPoint - firePoint.position).normalized;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-
-            // Gọi mũi tên ra
-            Instantiate(VFX, firePoint.position, rotation);
-            Instantiate(arrowPrefab, firePoint.position, rotation);
-
-            // Vẽ ray để căn chỉnh trong Scene View
-            Debug.DrawRay(firePoint.position, direction * 100f, Color.red, 2f); // Đường màu đỏ, tồn tại 2 giây
+            // Hướng bắn thẳng vào thân địch (nâng nhẹ Y cho tự nhiên)
+            direction = (enemy.position + Vector3.up * 1.2f - firePoint.position).normalized;
+            rotation  = Quaternion.LookRotation(direction);
         }
 
+        // Gọi VFX + Arrow
+        Instantiate(VFX,        firePoint.position, rotation);
+        Instantiate(arrowPrefab, firePoint.position, rotation);
+
         animator.SetTrigger("Fire");
-        Debug.Log("Arrow fired!");
+        Debug.DrawRay(firePoint.position, direction * 30f, Color.red, 1.5f);
     }
 
 
+    // Tùy ý giới hạn tầm dò nếu muốn (không bắt buộc)
+    private Transform GetNearestEnemy()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        Transform nearest = null;
+        float minSqr = Mathf.Infinity;
+        Vector3 myPos = transform.position;
 
+        foreach (GameObject e in enemies)
+        {
+            float sqr = (e.transform.position - myPos).sqrMagnitude;
+            if (sqr < minSqr)
+            {
+                minSqr = sqr;
+                nearest = e.transform;
+            }
+        }
+        return nearest;
+    }
     private void HandleAimingWithRigTarget()
     {
         Vector2 lookInput = inputActions.Player.Look.ReadValue<Vector2>();
@@ -139,24 +170,27 @@ public class Archer : CharacterControllerInput
 
         aimPitch = Mathf.Clamp(aimPitch, -90f, 90f);
 
-        // Nếu vượt quá 90f → xoay nhân vật và giữ aimYaw tại 90
-        if (aimYaw > 90f)
+        float maxRight = 0f;
+        float maxLeft = -40f;
+
+        if (aimYaw > maxRight)
         {
-            float excess = aimYaw - 90f;
-            aimYaw = 90f;
+            float excess = aimYaw - maxRight;
+            aimYaw = maxRight;
             transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + excess, 0f);
         }
-        // Nếu nhỏ hơn -75f → xoay nhân vật và giữ aimYaw tại -75
-        else if (aimYaw < -75f)
+        else if (aimYaw < maxLeft)
         {
-            float excess = aimYaw + 75f; // aimYaw âm
-            aimYaw = -75f;
+            float excess = aimYaw - maxLeft; // khác chỗ này!
+            aimYaw = maxLeft;
             transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + excess, 0f);
         }
 
-        // Tính hướng mới cho aimTarget
+
+        // Cập nhật vị trí Rig Target
         Vector3 direction = Quaternion.Euler(aimPitch, aimYaw, 0f) * Vector3.forward;
         Vector3 targetPosition = transform.position + transform.rotation * direction * 2f + Vector3.up * 1.5f;
         aimTarget.position = targetPosition;
     }
+
 }
