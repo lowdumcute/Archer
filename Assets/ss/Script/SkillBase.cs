@@ -8,7 +8,6 @@ public class SkillBase : ScriptableObject
 {
     public string skillName;
     public SkillType skillType;
-    public AnimationClip animationClip;
     public GameObject visualEffectPrefab;
 
     [Header("Stats")]

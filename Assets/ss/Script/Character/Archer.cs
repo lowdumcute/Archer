@@ -14,6 +14,7 @@ public class Archer : CharacterControllerInput
     [Header("Aim")]
     [SerializeField]private GameObject AimObj;
     public Transform aimTarget; // target để xoay bằng chuột
+    [SerializeField] GameObject Dot;
     private bool isAiming = false;
     public bool IsAiming => isAiming;
 
@@ -21,16 +22,19 @@ public class Archer : CharacterControllerInput
     private float aimYaw = 0f;
     private float aimPitch = 0f;
     [SerializeField]private float sensitivity = 0.5f;
+    [SerializeField]private SkillEffectBehaviour until;
 
 
     protected override void Start()
     {
+        Dot.SetActive(false);
         base.Start();
         AimObj.SetActive(false);
         originalAimTargetLocalPosition = aimTarget.localPosition;
         inputActions.Player.Aim.started += ctx => StartAiming();
         inputActions.Player.Aim.canceled += ctx => StopAiming();
         inputActions.Player.Attack.performed += ctx => FireArrow();
+        inputActions.Player.Ulti.performed += ctx => Ultimate();
     }
 
     protected override void Update()
@@ -53,7 +57,7 @@ public class Archer : CharacterControllerInput
             Debug.LogError("Animator is NULL!");
             return;
         }
-
+        Dot.SetActive(true);
         // ✅ Thêm dòng này để xoay nhân vật theo camera
         Vector3 cameraForward = mainCamera.transform.forward;
         cameraForward.y = 0f;
@@ -75,6 +79,7 @@ public class Archer : CharacterControllerInput
 
     private void StopAiming()
     {
+        Dot.SetActive(false);
         AimObj.SetActive(false);
         isAiming = false;
 
@@ -89,6 +94,11 @@ public class Archer : CharacterControllerInput
         aimTarget.localPosition = originalAimTargetLocalPosition;
     }
 
+    private void Ultimate()
+    {
+            Debug.Log("Using Skill: " + until.skillData.skillName);
+            until.UseSkill(GetNearestEnemy().gameObject);
+    }
 
     private void FireArrow()
     {
@@ -107,7 +117,7 @@ public class Archer : CharacterControllerInput
                 targetPoint = hit.point;
 
             direction = (targetPoint - firePoint.position).normalized;
-            rotation  = Quaternion.LookRotation(direction);
+            rotation = Quaternion.LookRotation(direction);
         }
         else
         {
@@ -116,7 +126,7 @@ public class Archer : CharacterControllerInput
             if (enemy == null) return;             // Không có địch thì thôi
 
             // Xoay nhân vật chỉ theo trục Y
-            Vector3 flatDir = enemy.position - transform.position ;
+            Vector3 flatDir = enemy.position - transform.position;
             flatDir.y = 0f;
             if (flatDir != Vector3.zero)
             {
@@ -127,11 +137,11 @@ public class Archer : CharacterControllerInput
 
             // Hướng bắn thẳng vào thân địch (nâng nhẹ Y cho tự nhiên)
             direction = (enemy.position + Vector3.up * 1.2f - firePoint.position).normalized;
-            rotation  = Quaternion.LookRotation(direction);
+            rotation = Quaternion.LookRotation(direction);
         }
 
         // Gọi VFX + Arrow
-        Instantiate(VFX,        firePoint.position, rotation);
+        Instantiate(VFX, firePoint.position, rotation);
         Instantiate(arrowPrefab, firePoint.position, rotation);
 
         animator.SetTrigger("Fire");

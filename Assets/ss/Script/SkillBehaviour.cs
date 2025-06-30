@@ -4,11 +4,8 @@ public abstract class SkillBehaviour : MonoBehaviour
 {
     public SkillBase skillData;
 
-    public virtual void UseSkill(Animator animator, GameObject target)
+    public virtual void UseSkill(GameObject target)
     {
-        // Play animation
-        if (skillData.animationClip != null)
-            animator.Play(skillData.animationClip.name);
 
         // Spawn VFX
         if (skillData.visualEffectPrefab != null)

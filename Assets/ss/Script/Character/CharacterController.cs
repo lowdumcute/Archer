@@ -18,7 +18,7 @@ public class CharacterControllerInput : MonoBehaviour
     {
         inputActions = new InputSystem();
     }
-    
+
     protected virtual void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -28,6 +28,7 @@ public class CharacterControllerInput : MonoBehaviour
         inputActions.Enable();
         inputActions.Player.Move.performed += OnMovePerformed;
         inputActions.Player.Move.canceled += OnMoveCanceled;
+        inputActions.Player.Jump.performed += ctx => Jump();
     }
 
     protected virtual void Update()
@@ -85,7 +86,14 @@ public class CharacterControllerInput : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, 10f * Time.deltaTime);
         }
     }
-
+    protected virtual void Jump()
+    {
+        if (controller.isGrounded)
+        {
+            verticalVelocity = Mathf.Sqrt(-2f * gravity * 1.0f); // 1.0f là chiều cao nhảy
+            animator?.SetTrigger("Jump");
+        }
+    }
 
     protected virtual void OnMovePerformed(InputAction.CallbackContext context)
     {
