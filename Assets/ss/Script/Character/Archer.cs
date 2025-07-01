@@ -22,7 +22,7 @@ public class Archer : CharacterControllerInput
     private float aimYaw = 0f;
     private float aimPitch = 0f;
     [SerializeField]private float sensitivity = 0.5f;
-    [SerializeField]private SkillEffectBehaviour until;
+    [SerializeField]private SkillBehaviour until;
 
 
     protected override void Start()
@@ -97,7 +97,7 @@ public class Archer : CharacterControllerInput
     private void Ultimate()
     {
             Debug.Log("Using Skill: " + until.skillData.skillName);
-            until.UseSkill(GetNearestEnemy().gameObject);
+            until.UseSkill(firePoint, GetNearestEnemy().gameObject);
     }
 
     private void FireArrow()
