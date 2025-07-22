@@ -3,6 +3,7 @@ using UnityEngine;
 public class Skill1 : SkillBehaviour
 {
     public float effectRadius = 3f;
+    public GameObject visualEffectPrefab;
     public float pullForce = 10f;
     public LayerMask enemyLayer;
     public float effectDuration = 1.5f;
@@ -13,9 +14,9 @@ public class Skill1 : SkillBehaviour
         Vector3 spawnPosition = GetGroundPosition(target.transform.position);
 
         // Spawn hiệu ứng visual
-        if (skillData.visualEffectPrefab != null)
+        if (visualEffectPrefab != null)
         {
-            GameObject vfx = Instantiate(skillData.visualEffectPrefab, spawnPosition, Quaternion.identity);
+            GameObject vfx = Instantiate(visualEffectPrefab, spawnPosition, Quaternion.identity);
             Destroy(vfx, 3f); // Xóa sau 3s hoặc thời gian bạn muốn
         }
 

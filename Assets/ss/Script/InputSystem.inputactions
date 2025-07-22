@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "secondaryMove",
+                    "type": "Button",
+                    "id": "293c2279-ee6b-4ed4-9fc8-1f519907f367",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -510,6 +519,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Ulti",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c2f1fea9-083d-46d8-9328-7243505c4d6a",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "secondaryMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Skill1
   skillType: 0
-  visualEffectPrefab: {fileID: 5164333740898580682, guid: 761eab2275d9c8f4fb39102130fd0b11, type: 3}
   power: 200
   statusEffect: 0
   statusDuration: 0
+  cooldown: 10

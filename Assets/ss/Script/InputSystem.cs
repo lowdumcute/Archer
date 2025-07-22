@@ -189,6 +189,15 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""secondaryMove"",
+                    ""type"": ""Button"",
+                    ""id"": ""293c2279-ee6b-4ed4-9fc8-1f519907f367"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -596,6 +605,17 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Ulti"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c2f1fea9-083d-46d8-9328-7243505c4d6a"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""secondaryMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1222,6 +1242,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_Ulti = m_Player.FindAction("Ulti", throwIfNotFound: true);
+        m_Player_secondaryMove = m_Player.FindAction("secondaryMove", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1330,6 +1351,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_Ulti;
+    private readonly InputAction m_Player_secondaryMove;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1385,6 +1407,10 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Ulti".
         /// </summary>
         public InputAction @Ulti => m_Wrapper.m_Player_Ulti;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/secondaryMove".
+        /// </summary>
+        public InputAction @secondaryMove => m_Wrapper.m_Player_secondaryMove;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1444,6 +1470,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Ulti.started += instance.OnUlti;
             @Ulti.performed += instance.OnUlti;
             @Ulti.canceled += instance.OnUlti;
+            @secondaryMove.started += instance.OnSecondaryMove;
+            @secondaryMove.performed += instance.OnSecondaryMove;
+            @secondaryMove.canceled += instance.OnSecondaryMove;
         }
 
         /// <summary>
@@ -1488,6 +1517,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Ulti.started -= instance.OnUlti;
             @Ulti.performed -= instance.OnUlti;
             @Ulti.canceled -= instance.OnUlti;
+            @secondaryMove.started -= instance.OnSecondaryMove;
+            @secondaryMove.performed -= instance.OnSecondaryMove;
+            @secondaryMove.canceled -= instance.OnSecondaryMove;
         }
 
         /// <summary>
@@ -1961,6 +1993,13 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUlti(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "secondaryMove" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSecondaryMove(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

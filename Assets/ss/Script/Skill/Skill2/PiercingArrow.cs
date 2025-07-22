@@ -41,7 +41,8 @@ public class PiercingArrow : MonoBehaviour
             // Hiệu ứng nổ
             if (explosionVFX != null)
             {
-                Instantiate(explosionVFX, transform.position, Quaternion.identity);
+                GameObject VFX = Instantiate(explosionVFX, transform.position, Quaternion.identity);
+                Destroy(VFX, 2f); // Xoá hiệu ứng sau 2 giây
             }
 
             Destroy(gameObject);
